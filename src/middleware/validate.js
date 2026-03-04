@@ -6,11 +6,7 @@ export const validate =
     if (!parsed.success) {
       return res.status(400).json({
         error: 'Validation failed',
-        details: parsed.error.issues.map((issue) => ({
-          path: issue.path.join('.'),
-          message: issue.message,
-          code: issue.code,
-        })),
+        details: parsed.error.format(),
       });
     }
 
