@@ -1,6 +1,8 @@
 import express from 'express';
 import bookmarkRouter from './routes/bookmarks.js';
 import folderRouter from './routes/folders.js';
+import notFound from './middleware/notFound.js';
+import errorHandler from './middleware/errorHandler.js';
 
 const app = express();
 
@@ -13,14 +15,7 @@ app.get('/health', (req, res) => {
 app.use('/api/bookmarks', bookmarkRouter);
 app.use('/api/folders', folderRouter);
 
-app.use((req, res) => {
-  res.status(404).json({ error: 'Not found' });
-});
-
-// eslint-disable-next-line no-unused-vars
-app.use((err, req, res, next) => {
-  console.error(err);
-  res.status(500).json({ error: 'Internal server error' });
-});
+app.use(notFound);
+app.use(errorHandler);
 
 export default app;
