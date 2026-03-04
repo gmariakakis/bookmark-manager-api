@@ -4,10 +4,7 @@ export const validate =
     const parsed = schema.safeParse(req[target] ?? {});
 
     if (!parsed.success) {
-      return res.status(400).json({
-        error: 'Validation failed',
-        details: parsed.error.format(),
-      });
+      return next(parsed.error);
     }
 
     req[target] = parsed.data;
