@@ -6,11 +6,22 @@ function mapFolderRow(row) {
     name: row.name,
     description: row.description,
     created_at: row.created_at,
+    bookmark_count: Number(row.bookmark_count ?? 0),
   };
 }
 
 export function findAll() {
-  const rows = db.prepare('SELECT * FROM folders ORDER BY name ASC').all();
+  const rows = db
+    .prepare(`
+      SELECT
+        f.*,
+        COUNT(b.id) AS bookmark_count
+      FROM folders f
+      LEFT JOIN bookmarks b ON b.folder_id = f.id
+      GROUP BY f.id
+      ORDER BY f.name ASC
+    `)
+    .all();
   return rows.map(mapFolderRow);
 }
 
