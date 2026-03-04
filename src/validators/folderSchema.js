@@ -6,3 +6,7 @@ export const createFolderSchema = z.object({
 });
 
 export const updateFolderSchema = createFolderSchema.partial();
+
+export const folderIdSchema = z.object({
+  id: z.coerce.number().int().positive(),
+});
